@@ -20,6 +20,46 @@ onlineUsers = list()
 newOnlineUsers = list()
 counterNewUsersOnline = 0
 
+def updateUserRegisteredList():
+    global userRegisteredIdList
+
+    userRegisteredIdList = list()
+
+    # Создаем список с ASURSO_id из локальной базы
+    for userData in registeredData:
+        userRegisteredIdList.append(userData['userId'])
+
+def updateUserRegisteredIdList_sorted():
+    global userRegisteredIdList_sorted
+
+    # Создаем группу списков для сортировки ASURSO_id из локальной базы по сотням тысяч...
+    userRegisteredIdList_sorted = list() # 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | <=9 | >1 (hundred thousand)
+    for x in range(0, 10):
+        userRegisteredIdList_sorted.append(list())
+
+    # ...теперь сортируем ASURSO_id
+    for x in userRegisteredIdList:
+        if x >= 100000 and x< 200000:
+            userRegisteredIdList_sorted[0].append(x)
+        elif x >= 200000 and x < 300000:
+            userRegisteredIdList_sorted[1].append(x)
+        elif x >= 300000 and x < 400000:
+            userRegisteredIdList_sorted[2].append(x)
+        elif x >= 400000 and x < 500000:
+            userRegisteredIdList_sorted[3].append(x)
+        elif x >= 500000 and x < 600000:
+            userRegisteredIdList_sorted[4].append(x)
+        elif x >= 600000 and x < 700000:
+            userRegisteredIdList_sorted[5].append(x)
+        elif x >= 700000 and x < 800000:
+            userRegisteredIdList_sorted[6].append(x)
+        elif x >= 800000 and x < 900000:
+            userRegisteredIdList_sorted[7].append(x)
+        elif x >= 900000:
+            userRegisteredIdList_sorted[8].append(x)
+        else:
+            userRegisteredIdList_sorted[9].append(x)
+
 
 if not os.path.isfile(path_to_asursoUsers):
     print("Файл локальной базы не найден!!!")
@@ -33,9 +73,7 @@ else:
     with open(path_to_asursoUsers, "r") as read_file:
         registeredData = json.load(read_file)
 
-    # Создаем список с ASURSO_id из локальной базы
-    for userData in registeredData:
-        userRegisteredIdList.append(userData['userId'])
+    updateUserRegisteredList()
 
     print("Файл локальной базы успешно загружен.")
 
@@ -58,33 +96,7 @@ else:
     print("Файл с сохраненными online-пользователями успешно загружен.")
 
 
-# Создаем группу списков для сортировки ASURSO_id из локальной базы по сотням тысяч...
-userRegisteredIdList_sorted = list() # 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | <=9 | >1 (hundred thousand)
-for x in range(0, 10):
-    userRegisteredIdList_sorted.append(list())
-
-# ...теперь сортируем ASURSO_id
-for x in userRegisteredIdList:
-    if x >= 100000 and x< 200000:
-        userRegisteredIdList_sorted[0].append(x)
-    elif x >= 200000 and x < 300000:
-        userRegisteredIdList_sorted[1].append(x)
-    elif x >= 300000 and x < 400000:
-        userRegisteredIdList_sorted[2].append(x)
-    elif x >= 400000 and x < 500000:
-        userRegisteredIdList_sorted[3].append(x)
-    elif x >= 500000 and x < 600000:
-        userRegisteredIdList_sorted[4].append(x)
-    elif x >= 600000 and x < 700000:
-        userRegisteredIdList_sorted[5].append(x)
-    elif x >= 700000 and x < 800000:
-        userRegisteredIdList_sorted[6].append(x)
-    elif x >= 800000 and x < 900000:
-        userRegisteredIdList_sorted[7].append(x)
-    elif x >= 900000:
-        userRegisteredIdList_sorted[8].append(x)
-    else:
-        userRegisteredIdList_sorted[9].append(x)
+updateUserRegisteredIdList_sorted()
 
 
 # Узнаем количество пользователей в локальной базе
@@ -183,6 +195,9 @@ def registerNewUser(userId):
     newOnlineUsers.append(dict())
     newOnlineUsers[counterNewUsersOnline]['userId'] = userId
     counterNewUsersOnline += 1
+
+    updateUserRegisteredList()
+    updateUserRegisteredIdList_sorted()
 
 def registerActivityUser(userId, active):
     global counterNewUsersOnline
