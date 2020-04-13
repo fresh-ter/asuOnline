@@ -2,9 +2,8 @@ import os
 import requests
 import ast
 import json
- 
-numberAT = '' # Здесь должно быть число at
-cookies = '' # Здесь должны быть куки
+
+import privateSettings
 
 path_to_asursoUsers = 'asursoUsers.json'
 path_to_asursoUsersOnline = 'asursoUsersOnline.json'
@@ -116,7 +115,7 @@ response = requests.get(
     		'Accept': 'application/json, text/javascript, */*; q=0.01',
     		'Sec-Fetch-Dest': 'empty',
     		'X-Requested-With': 'XMLHttpRequest',
-    		'at': numberAT,
+    		'at': privateSettings.numberAT,
     		'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Mobile Safari/537.36',
     		'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     		'Sec-Fetch-Site': 'same-origin',
@@ -124,7 +123,7 @@ response = requests.get(
     		'Referer': 'https://asurso.ru/angular/school/announcements/',
     		'Accept-Encoding': 'gzip, deflate, br',
     		'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-    		'Cookie': cookies
+    		'Cookie': privateSettings.cookies
     },
 )
 
